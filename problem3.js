@@ -1,45 +1,32 @@
-function filterActiveUsers(users) {
-  if (!Array.isArray(users) || users.length === 0) {
+function countHashtags(caption) {
+  if (typeof caption !== 'string') {
     return 'Invalid';
   }
 
-  for (let user of users) {
-    if (!user.hasOwnProperty('isActive')) {
-      return 'Invalid';
+  let words = caption.split(' ');
+  let hashtagCount = 0;
+  let longestTag = '';
+
+  for (let word of words) {
+    if (word.startsWith('#')) {
+      hashtagCount++;
+
+      let tag = word.slice(1);
+
+      if (tag.length > longestTag.length) {
+        longestTag = tag;
+      }
     }
   }
 
-  return users.filter(user => user.isActive === true);
+  return {
+    hashtagCount: hashtagCount,
+    longestTag: longestTag,
+  };
 }
 
-console.log(
-  filterActiveUsers([
-    { name: 'John', isActive: true },
-    { name: 'Alice', isActive: false },
-    { name: 'Bob', isActive: true },
-  ]),
-);
-console.log(
-  filterActiveUsers([
-    { name: 'Eve', isActive: false },
-    { name: 'Charlie', isActive: true },
-  ]),
-);
-console.log(
-  filterActiveUsers([
-    { name: 'David', isActive: true },
-    { name: 'Frank', isActive: true },
-  ]),
-);
-console.log(
-  filterActiveUsers([
-    { name: 'Grace', isActive: false },
-    { name: 'Hannah', isActive: false },
-  ]),
-);
-console.log(
-  filterActiveUsers([
-    { name: 'Ivy', isActive: true },
-    { name: 'Jack', isActive: false },
-  ]),
-);
+console.log(countHashtags('This is a #test caption with #multiple #hashtags'));
+console.log(countHashtags('No hashtags here'));
+console.log(countHashtags('#singlehashtag'));
+console.log(countHashtags('This is a #longesthashtag in the caption'));
+console.log(countHashtags('Multiple #tags #in #one #caption'));
